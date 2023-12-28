@@ -128,3 +128,19 @@ def handle_motor_control(data):
 
     # Send feedback to the client
     socketio.emit('motor_status', {'success': True})
+
+@socketio.on('connect')
+def connect():
+    print('Client connected')
+
+@socketio.on('disconnect')
+def disconnect():
+    print('Client disconnected')
+
+if __name__ == '__main__':
+    try:
+        socketio.run(app, host='0.0.0.0', port=90)
+    finally:
+        pwm_1.stop()
+        pwm_2.stop()
+        GPIO.cleanup()
