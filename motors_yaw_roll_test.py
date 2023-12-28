@@ -30,11 +30,11 @@ def index():
     return render_template('index.html')
 @socketio.on('control_motor')
 def handle_motor_control(data):
-    direction = data.get('direction', 'stop')
+    direction = data.get('direction', -1)
     speed = data.get('speed', 500)
 
     # Your motor control logic here
-    if direction == 'pitch_forward':
+    if direction == 1:
         pwm_1.start(50)
         pwm_2.start(50)
         
@@ -49,7 +49,7 @@ def handle_motor_control(data):
         GPIO.output(dir_pin_1, GPIO.HIGH)
         GPIO.output(dir_pin_2, GPIO.HIGH)
 
-    elif direction == 'pitch_backward':
+    elif direction == 0:
         pwm_1.start(50)
         pwm_2.start(50)
         
@@ -64,7 +64,7 @@ def handle_motor_control(data):
         GPIO.output(dir_pin_1, GPIO.LOW)
         GPIO.output(dir_pin_2, GPIO.LOW)
 
-    elif direction == 'yaw_left':
+    elif direction == 2:
         # Skid steering: Stop the right motor, left motor continues
         pwm_1.start(50)
         pwm_2.stop()
@@ -77,7 +77,7 @@ def handle_motor_control(data):
         # Set the direction for left motor
         GPIO.output(dir_pin_1, GPIO.HIGH)
 
-    elif direction == 'yaw_right':
+    elif direction == 3:
         # Skid steering: Stop the left motor, right motor continues
         pwm_1.stop()
         pwm_2.start(50)
@@ -90,7 +90,7 @@ def handle_motor_control(data):
         # Set the direction for right motor
         GPIO.output(dir_pin_2, GPIO.HIGH)
 
-    elif direction == 'roll_left':
+    elif direction == 4:
         # Skid steering: Reduce the speed of the right motor, left motor remains the same
         pwm_1.start(50)
         pwm_2.start(50)
@@ -100,13 +100,13 @@ def handle_motor_control(data):
             pwm_2.ChangeFrequency(1500)  # Adjust the frequency for slower speed
         else:
             pwm_1.ChangeFrequency(speed)
-            pwm_2.ChangeFrequency(speed)
+            pwm_2.ChangeFrequency(speed - 400)
 
         # Set the direction for both motors
         GPIO.output(dir_pin_1, GPIO.HIGH)
         GPIO.output(dir_pin_2, GPIO.HIGH)
 
-    elif direction == 'roll_right':
+    elif direction == 5:
         # Skid steering: Reduce the speed of the left motor, right motor remains the same
         pwm_1.start(50)
         pwm_2.start(50)
@@ -115,7 +115,7 @@ def handle_motor_control(data):
             pwm_1.ChangeFrequency(1500)  # Adjust the frequency for slower speed
             pwm_2.ChangeFrequency(1900)
         else:
-            pwm_1.ChangeFrequency(speed)
+            pwm_1.ChangeFrequency(speed - 400)
             pwm_2.ChangeFrequency(speed)
 
         # Set the direction for both motors
