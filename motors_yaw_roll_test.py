@@ -65,31 +65,38 @@ def handle_motor_control(data):
         GPIO.output(dir_pin_2, GPIO.LOW)
 
     elif direction == 2:
-        # Skid steering: Stop the right motor, left motor continues
+        # Skid steering: Slow the right motor, left motor continues
         pwm_1.start(50)
-        pwm_2.stop()
+        pwm_2.start(50)
 
         if speed > 1900:
             pwm_1.ChangeFrequency(1900)
+            pwm_2.ChangeFrequency(1500)
         else:
             pwm_1.ChangeFrequency(speed)
+            pwm_2.ChangeFrequency(speed - 400)
 
         # Set the direction for left motor
         GPIO.output(dir_pin_1, GPIO.HIGH)
+        GPIO.output(dir_pin_2, GPIO.LOW)
 
     elif direction == 3:
-        # Skid steering: Stop the left motor, right motor continues
-        pwm_1.stop()
+        # Skid steering: Slow the left motor, right motor continues
+        pwm_1.start(50)
         pwm_2.start(50)
 
         if speed > 1900:
             pwm_2.ChangeFrequency(1900)
+            pwm_1.ChangeFrequency(1500)
         else:
             pwm_2.ChangeFrequency(speed)
+            pwm_1.ChangeFrequency(speed - 400)
 
         # Set the direction for right motor
         GPIO.output(dir_pin_2, GPIO.HIGH)
-
+        GPIO.output(dir_pin_1, GPIO.LOW)
+    
+    # Up Left
     elif direction == 4:
         # Skid steering: Reduce the speed of the right motor, left motor remains the same
         pwm_1.start(50)
@@ -104,8 +111,9 @@ def handle_motor_control(data):
 
         # Set the direction for both motors
         GPIO.output(dir_pin_1, GPIO.HIGH)
-        GPIO.output(dir_pin_2, GPIO.HIGH)
+        GPIO.output(dir_pin_2, GPIO.LOW)
 
+    # Up Right
     elif direction == 5:
         # Skid steering: Reduce the speed of the left motor, right motor remains the same
         pwm_1.start(50)
@@ -119,7 +127,40 @@ def handle_motor_control(data):
             pwm_2.ChangeFrequency(speed)
 
         # Set the direction for both motors
+        GPIO.output(dir_pin_1, GPIO.LOW)
+        GPIO.output(dir_pin_2, GPIO.HIGH)
+
+    # Back Right
+    elif direction == 6:
+        # Skid steering: Reduce the speed of the left motor, right motor remains the same
+        pwm_1.start(50)
+        pwm_2.start(50)
+
+        if speed > 1900:
+            pwm_1.ChangeFrequency(1500)  # Adjust the frequency for slower speed
+            pwm_2.ChangeFrequency(1900)
+        else:
+            pwm_1.ChangeFrequency(speed - 400)
+            pwm_2.ChangeFrequency(speed)
+
+        # Set the direction for both motors
         GPIO.output(dir_pin_1, GPIO.HIGH)
+        GPIO.output(dir_pin_2, GPIO.LOW)
+    # Back Left
+    elif direction == 7:
+        # Skid steering: Reduce the speed of the right motor, left motor remains the same
+        pwm_1.start(50)
+        pwm_2.start(50)
+
+        if speed > 1900:
+            pwm_1.ChangeFrequency(1900)
+            pwm_2.ChangeFrequency(1500)  # Adjust the frequency for slower speed
+        else:
+            pwm_1.ChangeFrequency(speed)
+            pwm_2.ChangeFrequency(speed - 400)
+
+        # Set the direction for both motors
+        GPIO.output(dir_pin_1, GPIO.LOW)
         GPIO.output(dir_pin_2, GPIO.HIGH)
 
     else:
