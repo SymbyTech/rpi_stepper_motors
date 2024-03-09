@@ -46,8 +46,8 @@ def handle_motor_control(data):
             pwm_2.ChangeFrequency(speed)
             
         # Set the direction for both motors for pitch forward
-        GPIO.output(dir_pin_1, GPIO.HIGH)
-        GPIO.output(dir_pin_2, GPIO.HIGH)
+        GPIO.output(dir_pin_1, GPIO.HIGH) #right
+        GPIO.output(dir_pin_2, GPIO.LOW) #left
 
     elif direction == 0:
         pwm_1.start(50)
