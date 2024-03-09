@@ -3,7 +3,7 @@ from flask_socketio import SocketIO
 import RPi.GPIO as GPIO
 
 app = Flask(__name__)
-socketio = SocketIO(app)
+socketio = SocketIO(app, cors_allowed_origins='*')
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
 
