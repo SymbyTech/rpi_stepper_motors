@@ -25,9 +25,9 @@ GPIO.setup(pwm_pin_2, GPIO.OUT)
 GPIO.setup(dir_pin_2, GPIO.OUT)
 pwm_2 = GPIO.PWM(pwm_pin_2, 1000)
 
-@app.route('/')
-def index():
-    return render_template('index.html')
+#@app.route('/')
+#def index():
+    #return render_template('index.html')
 @socketio.on('control_motor')
 def handle_motor_control(data):
     direction = data.get('direction', -1)
